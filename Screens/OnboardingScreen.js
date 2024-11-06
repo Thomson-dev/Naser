@@ -4,10 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const OnboardingScreen = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>OnboardingScreen</Text>
-      </View>
+    <SafeAreaView className = 'flex-1 justify-center items-center text-3xl bg-white'>
+      <View className='flex-1 justify-center items-center text-3xl bg-white'>
+      <Text>Open up App.js to start working on your app!</Text>
+      
+    </View>
    </SafeAreaView>
   )
 }
