@@ -1,20 +1,58 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React from "react";
+import DetailsScreens from "./Screens/DetailsScreens";
+import PaymentScreen from "./Screens/PaymentScreen";
+import TabNavigation from "./Component/TabNavigation";
+import OnboardingScreen from "./Screens/OnboardingScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import RegisterScreen from "./Screens/RegisterScreen";
 
-export default function App() {
+
+const Stack = createNativeStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      <Stack.Screen
+          name="Onboarding"
+          component={OnboardingScreen}
+          options={{ animation: "slide_from_bottom" }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ animation: "slide_from_bottom" }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ animation: "slide_from_bottom" }}
+        /> 
+
+        <Stack.Screen
+          name="Tab"
+          component={TabNavigation}
+          options={{ animation: "slide_from_bottom" }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreens}
+          options={{ animation: "slide_from_bottom" }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ animation: "slide_from_bottom" }}
+        ></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({});
