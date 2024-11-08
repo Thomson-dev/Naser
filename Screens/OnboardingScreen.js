@@ -1,18 +1,118 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useState } from "react";
+import { SafeAreaView, View, Text, Image } from "react-native";
+import AppIntroSlider from "react-native-app-intro-slider";
+import HomeScreen from "./HomeScreen";
+import LoginScreen from "./LoginScreen";
+
+const slides = [
+  {
+    id: 1,
+    title: "Welcome to Our App",
+    description:
+      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+    image: require("../assets/slider-img-1.png"),
+  },
+  {
+    id: 2,
+    title: "Choose A Tasty Dish",
+    description:
+      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+    image: require("../assets/slider-img-2.png"),
+  },
+  {
+
+    
+    id: 3,
+    title: "Pick Up The Delivery",
+    description:
+      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+    image: require("../assets/slider-img-3.png"),
+  },
+];
 
 const OnboardingScreen = () => {
-  return (
-    <SafeAreaView className = 'flex-1 justify-center items-center text-3xl bg-white'>
-      <View className='flex-1 justify-center items-center text-3xl bg-white'>
-      <Text>Open up App.js to start working on your app!</Text>
-      
-    </View>
-   </SafeAreaView>
-  )
-}
+  const [showHomePage, setShowHomePage] = useState(false);
 
-export default OnboardingScreen
+  const buttonLabel = (label) => {
+    return (
+      <View
+        style={{
+          padding: 12,
+        }}
+      >
+        <Text
+          style={{
+            color: "blue",
+            fontWeight: "600",
+            fontSize: 16,
+          }}
+        >
+          {label}
+        </Text>
+      </View>
+    );
+  };
 
-const styles = StyleSheet.create({})
+  if (showHomePage) {
+    return (
+  <LoginScreen/>
+
+    );
+  } else {
+    return (
+      <AppIntroSlider
+        data={slides}
+        renderItem={({ item }) => {
+          return (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                padding: 15,
+                paddingTop: 100,
+              }}
+            >
+              <Image
+                source={item.image}
+                style={{
+                  width: "80%",
+                  height: 400,
+                }}
+                resizeMode="contain"
+              />
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: "black",
+                  fontSize: 24,
+                }}
+              >
+                {item.title}
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  paddingTop: 5,
+                  color: "black",
+                }}
+              >
+                {item.description}
+              </Text>
+            </View>
+          );
+        }}
+        activeDotStyle={{
+          backgroundColor: "blue",
+          width: 30,
+        }}
+ 
+        renderDoneButton={() => buttonLabel("Done")}
+        onDone={() => {
+          setShowHomePage(true);
+        }}
+      />
+    );
+  }
+};
+
+export default OnboardingScreen;
