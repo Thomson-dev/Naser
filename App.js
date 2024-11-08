@@ -16,8 +16,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-{/* 
-      <Stack.Screen
+
+      {/* <Stack.Screen
           name="Onboarding"
           component={OnboardingScreen}
           options={{ animation: "slide_from_bottom" }}
