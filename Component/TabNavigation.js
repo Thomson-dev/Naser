@@ -8,7 +8,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import CartScreen from "../Screens/CartScreen";
 import FavoritesScreen from "../Screens/FavoritesScreen";
-import OrderHistoryScreen from "../Screens/OrderHistoryScreen";
+import OrderHistoryScreen from "../Screens/ProfileScreen";
 import HomeScreen from "../Screens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
@@ -66,7 +66,7 @@ const TabNavigation = () => {
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    height: 80,
+    height: 70,
   
     backgroundColor: "#ffff",
     borderTopWidth: 0,

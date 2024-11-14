@@ -9,9 +9,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@reduxjs/toolkit": "^2.3.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "expo": "~51.0.28",
@@ -21,7 +23,9 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-image-slider-box": "github:megamaxs1234/react-native-image-slider-box"
+    "react-native-image-slider-box": "github:megamaxs1234/react-native-image-slider-box",
+    "react-native-toast-message": "^2.2.1",
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

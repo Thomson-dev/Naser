@@ -1,17 +1,23 @@
 import {
+  Alert,
   Image,
+  KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-
+import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 const colors = {
   white: "#FFFFFF",
@@ -21,106 +27,213 @@ const colors = {
 };
 
 const RegisterScreen = () => {
-  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [secureEntry, setSecureEntry] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(email, password, name);
 
-  const [secureEntery, setSecureEntery] = useState(true);
+  const navigation = useNavigation();
 
   const handleGoBack = () => {
     navigation.goBack();
   };
+
   const handleSignup = () => {
-    navigation.navigate("Register");
+    setIsLoading(true); // Start loading
+    const user = {
+      username: name,
+      email: email,
+      password: password,
+    };
+
+    // send a POST request to the backend API to register the user
+    axios
+      .post("https://molla-backend.vercel.app/api/user/signup", user)
+      .then((response) => {
+        console.log(response);
+
+        Toast.show({
+          type: "success",
+          text1: "Registration successful",
+          text2: "You have been registered successfully",
+          position: "top",
+          visibilityTime: 4000,
+          autoHide: true,
+          topOffset: 50,
+          bottomOffset: 40,
+          textStyle: { color: "white", fontSize: 18 },
+          style: {
+            backgroundColor: "#5cb85c", // Green color for success
+            padding: 15,
+            borderRadius: 8,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            elevation: 5,
+          },
+        });
+
+        setName("");
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        console.log("registration failed", error);
+
+        let errorMessage = "An error occurred while registering";
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          errorMessage = error.response.data.message || errorMessage;
+        } else if (error.request) {
+          // The request was made but no response was received
+          errorMessage = "No response received from the server";
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          errorMessage = error.message;
+        }
+
+        Toast.show({
+          type: "error",
+          text1: "Registration Error",
+          text2: errorMessage,
+          position: "top",
+          visibilityTime: 4000,
+          autoHide: true,
+          topOffset: 50,
+          bottomOffset: 40,
+          textStyle: { color: "white", fontSize: 18 },
+          style: {
+            backgroundColor: "#d9534f", // Red color for error
+            padding: 15,
+            borderRadius: 8,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            elevation: 5,
+          },
+        });
+      })
+      .finally(() => {
+        setIsLoading(false); // Stop loading
+      });
   };
 
   return (
-    <SafeAreaView className="flex-1">
-      <View className="p-6 flex-1  ">
-        <TouchableOpacity className="rounded-full flex justify-center items-center w-10 h-10 bg-[#D9D9D9] ">
-          <Ionicons
-            name={"arrow-back-outline"}
-            color={colors.primary}
-            size={25}
-          />
-        </TouchableOpacity>
-
-        <View className="my-8">
-          <Text className="font-semibold " style={styles.headingText}>
-            Let's get
-          </Text>
-          <Text className="font-semibold " style={styles.headingText}>
-            started
-          </Text>
-        </View>
-
-        {/* form */}
-        <View className="mt-5   flex-1   p-2 ">
-          <View className="flex flex-row rounded-xl gap-4 items-center border border-gray-300 p-2 ">
-            <Ionicons
-              name={"mail-outline"}
-              size={30}
-              color={colors.secondary}
-            />
-            <TextInput
-              className="flex-1 text-base text-gray-700"
-              placeholder="Enter your name"
-              placeholderTextColor={colors.secondary}
-              keyboardType="default"
-            />
-          </View>
-
-          <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2 ">
-            <Ionicons
-              name={"mail-outline"}
-              size={30}
-              color={colors.secondary}
-            />
-            <TextInput
-              className="flex-1 text-base text-gray-700"
-              placeholder="Enter your email"
-              placeholderTextColor={colors.secondary}
-              keyboardType="email-address"
-            />
-          </View>
-
-          <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2 ">
-            <SimpleLineIcons name={"lock"} size={30} color={colors.secondary} />
-            <TextInput
-              className="flex-1 text-base text-gray-700"
-              placeholder="Enter your password"
-              placeholderTextColor={colors.secondary}
-              keyboardType="email-address"
-            />
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View className="p-6 flex-1">
             <TouchableOpacity
-              onPress={() => {
-                setSecureEntery((prev) => !prev);
-              }}
+              onPress={handleGoBack}
+              className="rounded-full flex justify-center items-center w-10 h-10 bg-[#D9D9D9]"
             >
-              <SimpleLineIcons
-                name={"eye"}
-                size={20}
-                color={colors.secondary}
+              <Ionicons
+                name={"arrow-back-outline"}
+                color={colors.primary}
+                size={25}
               />
             </TouchableOpacity>
+
+            <View className="my-8">
+              <Text className="font-semibold" style={styles.headingText}>
+                Let's get
+              </Text>
+              <Text className="font-semibold" style={styles.headingText}>
+                started
+              </Text>
+            </View>
+
+            {/* Form */}
+            <View className="mt-5 flex-1 p-2">
+              <View className="flex flex-row rounded-xl gap-4 items-center border border-gray-300 p-2">
+                <AntDesign name="user" size={30} color={colors.secondary} />
+
+                <TextInput
+                  className="flex-1 text-base text-gray-700"
+                  placeholder="Enter your name"
+                  value={name}
+                  onChangeText={setName}
+                  placeholderTextColor={colors.secondary}
+                  keyboardType="default"
+                />
+              </View>
+
+              <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2">
+                <Ionicons
+                  name={"mail-outline"}
+                  size={30}
+                  color={colors.secondary}
+                />
+                <TextInput
+                  className="flex-1 text-base text-gray-700"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholderTextColor={colors.secondary}
+                  keyboardType="email-address"
+                />
+              </View>
+
+              <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2">
+                <SimpleLineIcons
+                  name={"lock"}
+                  size={30}
+                  color={colors.secondary}
+                />
+                <TextInput
+                  className="flex-1 text-base text-gray-700"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  secureTextEntry={secureEntry}
+                  placeholderTextColor={colors.secondary}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setSecureEntry((prev) => !prev);
+                  }}
+                >
+                  <Ionicons
+                    name={secureEntry ? "eye-off" : "eye"}
+                    size={20}
+                    color={colors.secondary}
+                  />
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity>
+                <Text className="text-right mt-4 font-semibold text-base ">
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleSignup}
+                className="mt-14 py-2"
+                style={styles.loginButtonWrapper}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator size="large" color={colors.white} />
+                ) : (
+                  <Text style={styles.loginText}>Sign up</Text>
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.footerContainer}>
+                <Text style={styles.accountText}>Don’t have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                  <Text style={styles.signupText}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-
-          <TouchableOpacity>
-            <Text className="text-right mt-4 font-semibold text-base text-slate-400 ">
-              Forgot Password?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="mt-14" style={styles.loginButtonWrapper}>
-            <Text style={styles.loginText}>Sign up</Text>
-          </TouchableOpacity>
-
-          <View style={styles.footerContainer}>
-            <Text style={styles.accountText}>Don’t have an account?</Text>
-            <TouchableOpacity onPress={handleSignup}>
-              <Text style={styles.signupText}>Sign Login</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
