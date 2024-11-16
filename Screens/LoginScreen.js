@@ -37,16 +37,19 @@ const LoginScreen = () => {
     navigation.goBack();
   };
 
-  console.log(email, password);
+ 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if (token) {
+          console.log("Token found:", token);
           navigation.replace("Tab");
+        } else {
+          console.log("No token found");
         }
       } catch (err) {
-        console.log("error message", err);
+        console.log("Error fetching token:", err);
       }
     };
     checkLoginStatus();
@@ -62,8 +65,9 @@ const LoginScreen = () => {
     axios
       .post("https://molla-backend.vercel.app/api/user/signin", user)
       .then((response) => {
-        console.log(response);
-        const token = response.token;
+       
+        const token = response.data.token
+        console.log(token)
         AsyncStorage.setItem("authToken", token);
         navigation.replace("Tab");
       })
@@ -265,7 +269,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   loginButtonWrapper: {
-    backgroundColor: colors.primary,
+    backgroundColor: '#008397',
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",

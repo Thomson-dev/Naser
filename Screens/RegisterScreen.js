@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   backButtonWrapper: {
     height: 40,
     width: 40,
-    backgroundColor: colors.gray,
+    backgroundColor: 'colors.gray',
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   loginButtonWrapper: {
-    backgroundColor: colors.primary,
+    backgroundColor: '#008397',
     borderRadius: 100,
   },
   loginText: {

@@ -1,17 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { Provider } from 'react-redux';
-import store from './store'; // Adjust the import path as needed
+import { Provider } from "react-redux";
+import store from "./store"; // Adjust the import path as needed
 import DetailsScreens from "./Screens/DetailsScreens";
 import PaymentScreen from "./Screens/PaymentScreen";
 import TabNavigation from "./Component/TabNavigation";
 import OnboardingScreen from "./Screens/OnboardingScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
-import Toast from 'react-native-toast-message';
-
+import ConfirmationScreen from "./Screens/ConfirmationScreen";
+import Toast from "react-native-toast-message";
+import { ModalPortal } from "react-native-modals";
+import AddAddressScreen from "./Screens/AddAddressScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,24 +22,23 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Onboarding"
             component={OnboardingScreen}
             options={{ animation: "slide_from_bottom" }}
-          /> */}
-           <Stack.Screen
+          /> 
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ animation: "slide_from_bottom" }}
           />
-          
-           <Stack.Screen
+
+          <Stack.Screen
             name="Register"
             component={RegisterScreen}
             options={{ animation: "slide_from_bottom" }}
           />
-         
-         
+
           <Stack.Screen
             name="Tab"
             component={TabNavigation}
@@ -49,12 +50,24 @@ const App = () => {
             options={{ animation: "slide_from_bottom" }}
           />
           <Stack.Screen
+            name="AddAddress"
+            component={AddAddressScreen}
+            options={{ animation: "slide_from_bottom" }}
+          />
+
+          <Stack.Screen
+            name="Confirm"
+            component={ConfirmationScreen}
+            options={{ animation: "slide_from_bottom" }}
+          />
+          <Stack.Screen
             name="Payment"
             component={PaymentScreen}
             options={{ animation: "slide_from_bottom" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
+      <ModalPortal />
       <Toast />
     </Provider>
   );

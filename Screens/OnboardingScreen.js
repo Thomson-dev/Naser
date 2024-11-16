@@ -42,7 +42,7 @@ const OnboardingScreen = () => {
       >
         <Text
           style={{
-            color: "blue",
+            color: "#008397",
             fontWeight: "600",
             fontSize: 16,
           }}
@@ -102,11 +102,15 @@ const OnboardingScreen = () => {
           );
         }}
         activeDotStyle={{
-          backgroundColor: "blue",
+          backgroundColor: "#008397",
           width: 30,
         }}
  
         renderDoneButton={() => buttonLabel("Done")}
+
+        showSkipButton
+        renderNextButton={() => buttonLabel("Next")}
+        renderSkipButton={() => buttonLabel("Skip")}
         onDone={() => {
           setShowHomePage(true);
         }}

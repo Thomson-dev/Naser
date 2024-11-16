@@ -1,5 +1,12 @@
-import { Image, FlatList, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector, useDispatch } from "react-redux";
 import { TouchableOpacity } from "react-native";
@@ -15,12 +22,14 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 
 const CartItem = ({ item, onIncrement, onDecrement, onRemove }) => {
-
-  
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(item.price * item.quantity);
+
+
+
+
   return (
     <View className="flex-1 gap-4 items-center flex-row p-4">
       <Image
@@ -34,12 +43,6 @@ const CartItem = ({ item, onIncrement, onDecrement, onRemove }) => {
             {formattedPrice}
           </Text>
           <View className="flex-row justify-between items-center">
-            {/* <TouchableOpacity
-              onPress={() => onDecrement(item._id)}
-              className="w-9 border aspect-square justify-center items-center rounded-full"
-            >
-              <Feather name="minus" size={16} color="black" />
-            </TouchableOpacity> */}
             {item?.quantity > 1 ? (
               <TouchableOpacity
                 onPress={() => onDecrement(item._id)}
@@ -69,12 +72,10 @@ const CartItem = ({ item, onIncrement, onDecrement, onRemove }) => {
   );
 };
 
-const CartScreen = () => {
+const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   console.log(cart);
-
-
 
   const handleIncrement = (id) => {
     dispatch(incrementQuantity({ _id: id }));
@@ -86,18 +87,17 @@ const CartScreen = () => {
 
   const handleRemoveItem = (id) => {
     dispatch(removeFromCart({ _id: id }));
+    
   };
+  const total = cart
+  ?.map((item) => item.price * item.quantity)
+  .reduce((curr, prev) => curr + prev, 0);
 
-  const renderItem = ({ item }) => (
-    <View className="flex-1 " key={item._id}>
-      <CartItem
-        item={item}
-        onIncrement={handleIncrement}
-        onDecrement={handleDecrement}
-        onRemove={handleRemoveItem}
-      />
-    </View>
-  );
+
+  const formattedTotal = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(total);
 
   return (
     <SafeAreaView className="flex-1">
@@ -112,28 +112,60 @@ const CartScreen = () => {
           <Ionicons name="notifications-outline" size={24} color="black" />
         </View>
 
+        <View
+          style={{ padding: 10, flexDirection: "row", alignItems: "center" }}
+        >
+          <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal: </Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{formattedTotal}</Text>
+        </View>
+
+        <Pressable
+         disabled={cart.length === 0}
+          onPress={() => navigation.navigate("Confirm")}
+      
+          style={{
+            backgroundColor: cart.length === 0 ? "#ccc" : "#008E97", 
+            padding: 15,
+            borderRadius: 5,
+            justifyContent: "center",
+            alignItems: "center",
+            marginHorizontal: 10,
+            marginTop: 10,
+          }}
+        >
+          <Text className="text-white">
+            Proceed to Buy ({cart.length}) items
+          </Text>
+        </Pressable>
+
         {/* Cart Items */}
         {cart.length === 0 ? (
-          <View className="flex-1 items-center justify-center p-4">
-            <Text className="text-lg font-semibold text-slate-500">
-              Your cart is empty
-            </Text>
+          <View className="flex-1  p-4">
+            {/* <Text className="text-lg font-semibold ">Your cart is empty</Text> */}
           </View>
         ) : (
-          <FlatList
-            data={cart}
+          <ScrollView
             style={{ flex: 1 }}
-            renderItem={renderItem}
-            keyExtractor={(item) => item._id.toString()}
             contentContainerStyle={{ paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
-          />
+          >
+            {cart.map((item) => (
+              <View className="flex-1" key={item._id}>
+                <CartItem
+                  item={item}
+                  onIncrement={handleIncrement}
+                  onDecrement={handleDecrement}
+                  onRemove={handleRemoveItem}
+                />
+              </View>
+            ))}
+          </ScrollView>
         )}
 
         {/* Footer */}
-        {cart.length > 0 && (
+        {/* {cart.length > 0 && (
           <View
-            className=" py-4 px-2 rounded-xl my-5 mx-5"
+            className="py-4 px-2 rounded-xl my-5 mx-5"
             style={styles.footer}
           >
             <View>
@@ -146,7 +178,7 @@ const CartScreen = () => {
               <Text className="text-white text-base text-center">Buy Now</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </View>
     </SafeAreaView>
   );
@@ -160,7 +192,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
