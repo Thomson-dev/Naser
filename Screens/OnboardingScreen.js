@@ -74,6 +74,7 @@ const OnboardingScreen = () => {
             >
               <Image
                 source={item.image}
+                
                 style={{
                   width: "80%",
                   height: 400,

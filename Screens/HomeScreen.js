@@ -223,7 +223,7 @@ const HomeScreen = ({ navigation }) => {
             showsHorizontalScrollIndicator={false}
           >
             {categories.map((category, index) => (
-              <View className="p-3" key={index}>
+              <View className="p-3" key={category}>
                 <Pressable
                   key={index}
                   onPress={() => setSelectedCategory(category)}
@@ -262,7 +262,7 @@ const HomeScreen = ({ navigation }) => {
                 >
                   <ProductItem
                     item={item}
-                    key={item._id}
+                    key={item}
                     className=" "
                     navigation={navigation}
                   />
@@ -384,7 +384,7 @@ const HomeScreen = ({ navigation }) => {
             {/* already added addresses */}
             {addresses?.map((item, index) => (
               <Pressable
-                key={index}
+                key={item}
                 onPress={() => setSelectedAdress(item)}
                 style={{
                   width: 140,

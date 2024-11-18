@@ -3,33 +3,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ScrollView,
   ActivityIndicator,
-  FlatList,
-  StyleSheet,
   View,
   Text,
-  Image,
-  TextInput,
   Pressable,
-  Dimensions,
   Alert,
 } from "react-native";
 import { jwtDecode } from "jwt-decode";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { cleanCart } from "../features/CartReducer";
+import { useNavigation } from "@react-navigation/native";
 
 const ConfirmationScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState("");
-  const [option, setOption] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
   const [selectedOption, setSelectedOption] = useState("");
 
   const cart = useSelector((state) => state.cart.cart);
@@ -37,12 +29,17 @@ const ConfirmationScreen = () => {
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
 
+
+    const navigation = useNavigation();
+
   const steps = [
     { title: "Address", content: "Address Form" },
-
     { title: "Payment", content: "Payment Details" },
     { title: "Place Order", content: "Order Summary" },
   ];
+
+  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
@@ -55,14 +52,49 @@ const ConfirmationScreen = () => {
       const response = await axios.get(
         `https://molla-backend.vercel.app/api/address/${userId}`
       );
-
       setAddresses(response.data);
     } catch (error) {
-      console.log("error", error);
+      console.log("Error fetching addresses", error);
+      Alert.alert(
+        "Error",
+        "There was an issue fetching your addresses. Please try again."
+      );
     }
   };
 
-  const handlePlaceOrder = async () => {};
+  const handlePlaceOrder = async () => {
+    setIsLoading(true);
+    try {
+      const orderData = {
+        userId: userId,
+        cartItems: cart,
+        totalPrice: total,
+        shippingAddress: selectedAddress,
+        paymentMethod: selectedOption,
+      };
+
+      const response = await axios.post(
+        "https://molla-backend.vercel.app/api/orders",
+        orderData
+      );
+
+      if (response.status === 201) {
+        navigation.navigate("Order");
+        dispatch(cleanCart());
+        console.log("Order created successfully", response.data);
+      } else {
+        console.log("Error creating order", response.data);
+      }
+    } catch (error) {
+      console.log("Error creating order", error);
+      Alert.alert(
+        "Error",
+        "There was an issue creating your order. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -71,7 +103,6 @@ const ConfirmationScreen = () => {
         if (token) {
           const decoded = jwtDecode(token);
           const userId = decoded.id;
-
           setUserId(userId);
         }
       } catch (error) {
@@ -95,7 +126,7 @@ const ConfirmationScreen = () => {
             }}
           >
             {steps?.map((step, index) => (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
                 {index > 0 && (
                   <View
                     style={[
@@ -121,7 +152,6 @@ const ConfirmationScreen = () => {
                     <Text
                       style={{
                         fontSize: 16,
-
                         fontWeight: "bold",
                         color: "white",
                       }}
@@ -147,7 +177,7 @@ const ConfirmationScreen = () => {
             ))}
           </View>
 
-          {currentStep == 0 && (
+          {currentStep === 0 && (
             <View className="mt-3">
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                 Select Delivery Address
@@ -156,6 +186,7 @@ const ConfirmationScreen = () => {
               <Pressable onPress={() => setSelectedAdress(item)}>
                 {addresses?.map((item, index) => (
                   <Pressable
+                    key={item._id}
                     style={{
                       borderWidth: 1,
                       borderColor: "#D0D0D0",
@@ -202,7 +233,6 @@ const ConfirmationScreen = () => {
                         >
                           {item?.street}
                         </Text>
-                        {/* <Entypo name="location-pin" size={24} color="red" /> */}
                       </View>
 
                       <Text
@@ -277,7 +307,6 @@ const ConfirmationScreen = () => {
                                 padding: 10,
                                 borderRadius: 5,
                                 justifyContent: "center",
-
                                 alignItems: "center",
                                 marginTop: 10,
                               }}
@@ -297,7 +326,7 @@ const ConfirmationScreen = () => {
             </View>
           )}
         </View>
-        {currentStep == 1 && (
+        {currentStep === 1 && (
           <View style={{ marginHorizontal: 20 }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
               Select your payment Method
@@ -384,10 +413,9 @@ const ConfirmationScreen = () => {
               onPress={() => setCurrentStep(3)}
               disabled={!selectedOption}
               style={{
-                backgroundColor:  !selectedOption ? "#ccc" : "#008E97",
+                backgroundColor: !selectedOption ? "#ccc" : "#008E97",
                 padding: 14,
                 borderRadius: 10,
-                
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: 15,
@@ -508,16 +536,21 @@ const ConfirmationScreen = () => {
 
             <Pressable
               onPress={handlePlaceOrder}
+              disabled={isLoading}
               style={{
                 backgroundColor: "#008397",
-                padding: 15,
+                padding: 17,
                 borderRadius: 10,
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: 20,
               }}
             >
-              <Text className=" text-white font-bold ">Place your order</Text>
+              {isLoading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text className="text-white font-bold">Place your order</Text>
+              )}
             </Pressable>
           </View>
         )}

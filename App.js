@@ -14,6 +14,8 @@ import ConfirmationScreen from "./Screens/ConfirmationScreen";
 import Toast from "react-native-toast-message";
 import { ModalPortal } from "react-native-modals";
 import AddAddressScreen from "./Screens/AddAddressScreen";
+import OrderScreen from "./Screens/OrderScreen";
+import DeliveryScreen from "./Screens/DeliveryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +28,7 @@ const App = () => {
             name="Onboarding"
             component={OnboardingScreen}
             options={{ animation: "slide_from_bottom" }}
-          /> 
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -61,8 +63,13 @@ const App = () => {
             options={{ animation: "slide_from_bottom" }}
           />
           <Stack.Screen
-            name="Payment"
-            component={PaymentScreen}
+            name="Order"
+            component={OrderScreen}
+            options={{ animation: "slide_from_bottom" }}
+          />
+             <Stack.Screen
+            name="Delivery"
+            component={DeliveryScreen}
             options={{ animation: "slide_from_bottom" }}
           />
         </Stack.Navigator>

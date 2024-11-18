@@ -31,7 +31,7 @@ const CartItem = ({ item, onIncrement, onDecrement, onRemove }) => {
 
 
   return (
-    <View className="flex-1 gap-4 items-center flex-row p-4">
+    <View className="flex-1  gap-4 items-center flex-row p-4">
       <Image
         source={{ uri: item.image }}
         className="w-24 rounded-md aspect-square"
@@ -103,7 +103,7 @@ const CartScreen = ({navigation}) => {
     <SafeAreaView className="flex-1">
       <View className="flex-1">
         {/* Header */}
-        <View className="flex-row justify-between items-center p-4">
+        <View className="flex-row  justify-between items-center p-4">
           <Image
             className="rounded-full w-10 h-10"
             source={require("../assets/user-img.jpg")}
@@ -150,7 +150,7 @@ const CartScreen = ({navigation}) => {
             showsVerticalScrollIndicator={false}
           >
             {cart.map((item) => (
-              <View className="flex-1" key={item._id}>
+              <View className="flex-1 " key={item._id}>
                 <CartItem
                   item={item}
                   onIncrement={handleIncrement}
@@ -170,6 +170,7 @@ const CartScreen = ({navigation}) => {
           >
             <View>
               <Text className="text-base font-semibold text-slate-500">
+              
                 Total price:
               </Text>
               <Text className="text-2xl font-bold">$2000</Text>
