@@ -312,7 +312,7 @@ const AddAddressScreen = ({ navigation }) => {
 
             <Pressable
               onPress={handleAddAddress}
-              className="bg-black rounded-lg"
+              className="bg-[#008E97] rounded-lg"
               style={{
                 padding: 19,
                 justifyContent: "center",

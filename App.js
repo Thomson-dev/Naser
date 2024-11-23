@@ -16,66 +16,67 @@ import { ModalPortal } from "react-native-modals";
 import AddAddressScreen from "./Screens/AddAddressScreen";
 import OrderScreen from "./Screens/OrderScreen";
 import DeliveryScreen from "./Screens/DeliveryScreen";
-
+import { StripeProvider } from "@stripe/stripe-react-native";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const STRIPE_KEY =
+    "pk_test_51JR35pDcBGT3lmREe8J7TVNno7NubCSqQTKMoUDoHxTsHK4KEObkX54BG0efmtLeMxrdk6Sn4nuqUmeoT1ZaW1Vc00j64CUV9H";
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="Onboarding"
-            component={OnboardingScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-
-          <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-
-          <Stack.Screen
-            name="Tab"
-            component={TabNavigation}
-            options={{ animation: "slide_from_bottom" }}
-          />
-          <Stack.Screen
-            name="Details"
-            component={DetailsScreens}
-            options={{ animation: "slide_from_bottom" }}
-          />
-          <Stack.Screen
-            name="AddAddress"
-            component={AddAddressScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-
-          <Stack.Screen
-            name="Confirm"
-            component={ConfirmationScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-          <Stack.Screen
-            name="Order"
-            component={OrderScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-             <Stack.Screen
-            name="Delivery"
-            component={DeliveryScreen}
-            options={{ animation: "slide_from_bottom" }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <ModalPortal />
-      <Toast />
+      <StripeProvider publishableKey={STRIPE_KEY}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="Onboarding"
+              component={OnboardingScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={RegisterScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Tab"
+              component={TabNavigation}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Details"
+              component={DetailsScreens}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="AddAddress"
+              component={AddAddressScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Confirm"
+              component={ConfirmationScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Order"
+              component={OrderScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+            <Stack.Screen
+              name="Delivery"
+              component={DeliveryScreen}
+              options={{ animation: "slide_from_bottom" }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <ModalPortal />
+        <Toast />
+      </StripeProvider>
     </Provider>
   );
 };

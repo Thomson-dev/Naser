@@ -15,6 +15,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from "react-redux";
 import { cleanCart } from "../features/CartReducer";
 import { useNavigation } from "@react-navigation/native";
+import {
+  useStripe,
+  initPaymentSheet,
+  presentPaymentSheet,
+} from "@stripe/stripe-react-native";
 
 const ConfirmationScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -29,8 +34,7 @@ const ConfirmationScreen = () => {
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
 
-
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const steps = [
     { title: "Address", content: "Address Form" },
@@ -38,7 +42,6 @@ const ConfirmationScreen = () => {
     { title: "Place Order", content: "Order Summary" },
   ];
 
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,6 +98,78 @@ const ConfirmationScreen = () => {
       setIsLoading(false);
     }
   };
+  console.log(selectedOption);
+
+  const pay = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "https://molla-backend.vercel.app/api/stripe/intents",
+        {
+          amount: Math.floor(total * 100), // Amount in cents
+          currency: "usd",
+        }
+      );
+
+      if (response.status !== 200) {
+        Alert.alert("Something went wrong", "Unable to create payment intent.");
+        setIsLoading(false);
+        return;
+      }
+
+      const { clientSecret } = response.data;
+
+      // Initialize the Payment sheet
+      const { error: initError } = await initPaymentSheet({
+        merchantDisplayName: "The Molla Shop",
+        paymentIntentClientSecret: clientSecret,
+      });
+
+      if (initError) {
+        console.log(initError);
+        Alert.alert(
+          "Something went wrong",
+          "Unable to initialize payment sheet."
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      // Present the Payment Sheet from Stripe
+      const { error: paymentError } = await presentPaymentSheet();
+
+      if (paymentError) {
+        Alert.alert(`Error code: ${paymentError.code}`, paymentError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      // Place the order after successful payment
+      const orderData = {
+        userId: userId,
+        cartItems: cart,
+        totalPrice: total,
+        shippingAddress: selectedAddress,
+        paymentMethod: "card",
+      };
+
+      const response2 = await axios.post(
+        "https://molla-backend.vercel.app/api/orders",
+        orderData
+      );
+      if (response2.status === 201) {
+        navigation.navigate("Order");
+        dispatch(cleanCart());
+        console.log("order created successfully", response2.data);
+      } else {
+        console.log("error creating order", response2.data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -126,7 +201,10 @@ const ConfirmationScreen = () => {
             }}
           >
             {steps?.map((step, index) => (
-              <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
+              <View
+                key={index}
+                style={{ justifyContent: "center", alignItems: "center" }}
+              >
                 {index > 0 && (
                   <View
                     style={[

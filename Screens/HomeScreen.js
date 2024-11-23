@@ -41,8 +41,11 @@ const ProductItem = ({ item, navigation }) => {
           id: item.id,
         });
       }}
-      className = ''
-      style={[{ marginHorizontal: 10, marginVertical: 10 },{ width: itemWidth }]}
+      className=""
+      style={[
+        { marginHorizontal: 10, marginVertical: 10 },
+        { width: itemWidth },
+      ]}
     >
       <Image
         className="w-full rounded-md aspect-square object-contain"
@@ -74,7 +77,7 @@ const HomeScreen = ({ navigation }) => {
   const [userId, setUserId] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState("");
-
+  const [refetch, setRefetch] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const tabBarHeight = useBottomTabBarHeight();
   useEffect(() => {
@@ -113,28 +116,35 @@ const HomeScreen = ({ navigation }) => {
     fetchUser();
   }, []);
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        "https://molla-backend.vercel.app/api/product"
+      );
+
+      setProducts(data.product);
+
+      const uniqueCategories = [
+        "All",
+        ...new Set(data.product.map((product) => product.category)),
+      ];
+      setCategories(uniqueCategories);
+    } catch (error) {
+      console.log("error message", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://molla-backend.vercel.app/api/product"
-        );
-
-        setProducts(data.product);
-
-        const uniqueCategories = [
-          "All",
-          ...new Set(data.product.map((product) => product.category)),
-        ];
-        setCategories(uniqueCategories);
-      } catch (error) {
-        console.log("error message", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 60000); // 1 minute in milliseconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const filteredProducts =
