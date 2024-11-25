@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect } from 'react'
-import { View, Text, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, Image, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -16,6 +16,11 @@ const DeliveryScreen = () => {
   return (
     <View className = 'bg-[#00CCBB] flex-1'>
       <SafeAreaView className="  z-50">
+      <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
         <View className="flex-row justify-between items-center p-8">
           <TouchableOpacity onPress={() => navigation.navigate('Tab')}>
           <FontAwesome name="times" size={30} color="white" />

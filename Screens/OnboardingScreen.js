@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text, Image } from "react-native";
+import { SafeAreaView, View, Text, Image, StatusBar } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import HomeScreen from "./HomeScreen";
 import LoginScreen from "./LoginScreen";
@@ -7,25 +7,23 @@ import LoginScreen from "./LoginScreen";
 const slides = [
   {
     id: 1,
-    title: "Welcome to Our App",
+    title: "Welcome to Our FASTGAK",
     description:
       "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
     image: require("../assets/slider-img-1.png"),
   },
   {
     id: 2,
-    title: "Choose A Tasty Dish",
+    title: "Smartphones for Every Need",
     description:
-      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+      "Explore the latest smartphones with cutting-edge technology and sleek designs. Find your perfect match today.",
     image: require("../assets/slider-img-2.png"),
   },
   {
-
-    
     id: 3,
-    title: "Pick Up The Delivery",
+    title: "Fresh Accessories & Footwear",
     description:
-      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+      "Complement your look with our exclusive accessories and footwear. Step out in style today.",
     image: require("../assets/slider-img-3.png"),
   },
 ];
@@ -54,68 +52,68 @@ const OnboardingScreen = () => {
   };
 
   if (showHomePage) {
-    return (
-  <LoginScreen/>
-
-    );
+    return <LoginScreen />;
   } else {
     return (
-      <AppIntroSlider
-        data={slides}
-        renderItem={({ item }) => {
-          return (
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                padding: 15,
-                paddingTop: 100,
-              }}
-            >
-              <Image
-                source={item.image}
-                
+      <>
+        <StatusBar
+          barStyle="light-content" // Set text color to light
+          backgroundColor="black" // Set background color
+        />
+        <AppIntroSlider
+          data={slides}
+          renderItem={({ item }) => {
+            return (
+              <View
                 style={{
-                  width: "80%",
-                  height: 400,
-                }}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: "black",
-                  fontSize: 24,
+                  flex: 1,
+                  alignItems: "center",
+                  padding: 15,
+                  paddingTop: 100,
                 }}
               >
-                {item.title}
-              </Text>
-              <Text
-                style={{
-                  textAlign: "center",
-                  paddingTop: 5,
-                  color: "black",
-                }}
-              >
-                {item.description}
-              </Text>
-            </View>
-          );
-        }}
-        activeDotStyle={{
-          backgroundColor: "#008397",
-          width: 30,
-        }}
- 
-        renderDoneButton={() => buttonLabel("Done")}
-
-        showSkipButton
-        renderNextButton={() => buttonLabel("Next")}
-        renderSkipButton={() => buttonLabel("Skip")}
-        onDone={() => {
-          setShowHomePage(true);
-        }}
-      />
+                <Image
+                  source={item.image}
+                  style={{
+                    width: "80%",
+                    height: 400,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: 24,
+                  }}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 5,
+                    color: "black",
+                  }}
+                >
+                  {item.description}
+                </Text>
+              </View>
+            );
+          }}
+          activeDotStyle={{
+            backgroundColor: "#008397",
+            width: 30,
+          }}
+          renderDoneButton={() => buttonLabel("Done")}
+          showSkipButton
+          renderNextButton={() => buttonLabel("Next")}
+          renderSkipButton={() => buttonLabel("Skip")}
+          onDone={() => {
+            setShowHomePage(true);
+          }}
+        />
+      </>
     );
   }
 };

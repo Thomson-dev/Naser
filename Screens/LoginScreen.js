@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -43,7 +44,7 @@ const LoginScreen = () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if (token) {
-          console.log("Token found:", token);
+  
           navigation.replace("Tab");
         } else {
           console.log("No token found");
@@ -67,7 +68,7 @@ const LoginScreen = () => {
       .then((response) => {
        
         const token = response.data.token
-        console.log(token)
+
         AsyncStorage.setItem("authToken", token);
         navigation.replace("Tab");
       })
@@ -121,6 +122,11 @@ const LoginScreen = () => {
   return (
     <SafeAreaView className="flex-1">
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View className="p-6 flex-1">
             {/* <TouchableOpacity
@@ -164,14 +170,14 @@ const LoginScreen = () => {
                 />
               </View>
 
-              <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-4 mt-6  items-center border border-gray-300 p-2">
                 <SimpleLineIcons
                   name={"lock"}
                   size={30}
                   color={colors.secondary}
                 />
                 <TextInput
-                  className="flex-1 text-base text-gray-700"
+                  className="flex-1  text-base text-gray-700"
                   placeholder="Enter your password"
                   value={password}
                   onChangeText={(text) => setPassword(text)}

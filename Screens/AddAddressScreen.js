@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState } from "react";
@@ -117,6 +118,11 @@ const AddAddressScreen = ({ navigation }) => {
   return (
     <SafeAreaView className="flex-1">
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}

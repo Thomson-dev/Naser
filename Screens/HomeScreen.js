@@ -15,6 +15,7 @@ import {
   TextInput,
   Pressable,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import axios from "axios";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
@@ -26,9 +27,9 @@ const { width } = Dimensions.get("window");
 const itemWidth = (width - 60) / 2;
 
 const images = [
-  "https://images.pexels.com/photos/1453008/pexels-photo-1453008.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  "https://images.pexels.com/photos/10001826/pexels-photo-10001826.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  "https://images.pexels.com/photos/8410814/pexels-photo-8410814.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://plus.unsplash.com/premium_photo-1664475347754-f633cb166d13?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1605902711622-cfb43c4437b5?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1643906226799-59eab234e41d?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
 const ProductItem = ({ item, navigation }) => {
@@ -79,6 +80,7 @@ const HomeScreen = ({ navigation }) => {
   const [selectedAddress, setSelectedAdress] = useState("");
   const [refetch, setRefetch] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const tabBarHeight = useBottomTabBarHeight();
   useEffect(() => {
     if (userId) {
@@ -140,21 +142,31 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     fetchData();
 
-    const interval = setInterval(() => {
-      fetchData();
-    }, 60000); // 1 minute in milliseconds
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 60000); // 1 minute in milliseconds
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
+    // return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
-  const filteredProducts =
-    selectedCategory && selectedCategory !== "All"
-      ? products.filter((product) => product.category === selectedCategory)
-      : products;
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory && selectedCategory !== "All"
+        ? product.category === selectedCategory
+        : true;
+    const matchesSearchText = product.name
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+    return matchesCategory && matchesSearchText;
+  });
 
   return (
     <>
       <SafeAreaView className="flex-1">
+        <StatusBar
+          barStyle="light-content" // Set text color to light
+          backgroundColor="black" // Set background color
+        />
         <ScrollView
           className="flex-1"
           vertical
@@ -211,6 +223,8 @@ const HomeScreen = ({ navigation }) => {
               className="flex-1 ml-4"
               placeholder="Search here..."
               placeholderTextColor="gray"
+              value={searchText}
+              onChangeText={(text) => setSearchText(text)}
             />
           </View>
 
@@ -264,6 +278,7 @@ const HomeScreen = ({ navigation }) => {
             ) : (
               filteredProducts?.map((item) => (
                 <View
+                  key={item._id}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
@@ -394,7 +409,7 @@ const HomeScreen = ({ navigation }) => {
             {/* already added addresses */}
             {addresses?.map((item, index) => (
               <Pressable
-                key={item}
+                key={item._id || index}
                 onPress={() => setSelectedAdress(item)}
                 style={{
                   width: 140,

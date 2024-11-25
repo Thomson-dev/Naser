@@ -12,16 +12,23 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thomson200.Naser"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/naseer1124.jpg",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.thomson200.Naser"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e37fc77d-339e-4a12-b91e-a58cdca8675d"
+      }
     }
   }
 }

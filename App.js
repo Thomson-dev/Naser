@@ -16,7 +16,11 @@ import { ModalPortal } from "react-native-modals";
 import AddAddressScreen from "./Screens/AddAddressScreen";
 import OrderScreen from "./Screens/OrderScreen";
 import DeliveryScreen from "./Screens/DeliveryScreen";
+import { enableScreens } from 'react-native-screens';
 import { StripeProvider } from "@stripe/stripe-react-native";
+
+enableScreens();
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {

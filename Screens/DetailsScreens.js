@@ -41,6 +41,11 @@ const DetailsScreens = ({ route, navigation }) => {
   return (
     <SafeAreaView className="flex-1">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
         <ImageBackground
           className="w-full object-contain aspect-square"
           source={{ uri: item.image }}

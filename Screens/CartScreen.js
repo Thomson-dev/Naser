@@ -75,7 +75,7 @@ const CartItem = ({ item, onIncrement, onDecrement, onRemove }) => {
 const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
+
 
   const handleIncrement = (id) => {
     dispatch(incrementQuantity({ _id: id }));

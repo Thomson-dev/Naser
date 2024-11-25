@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Animatable from "react-native-animatable";
@@ -16,6 +16,11 @@ const OrderScreen = () => {
 
   return (
     <SafeAreaView className="bg-[#00CCBB] flex-1 justify-center items-center">
+           <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
       <Animatable.Image
         source={require("../assets/orderLoading.gif")}
         animation="slideInUp"

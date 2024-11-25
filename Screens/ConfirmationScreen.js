@@ -7,6 +7,7 @@ import {
   Text,
   Pressable,
   Alert,
+  StatusBar,
 } from "react-native";
 import { jwtDecode } from "jwt-decode";
 import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -191,6 +192,11 @@ const ConfirmationScreen = () => {
   return (
     <SafeAreaView>
       <ScrollView style={{ marginTop: 10 }}>
+      <StatusBar
+        barStyle="light-content" // Set text color to light
+        backgroundColor="black" // Set background color
+       
+      />
         <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 20 }}>
           <View
             style={{
