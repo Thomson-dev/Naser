@@ -7,7 +7,7 @@
     "icon": "./assets/naseer1124.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/22Sep24.jpg",
+      "image": "./assets/splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -29,6 +29,14 @@
       "eas": {
         "projectId": "e37fc77d-339e-4a12-b91e-a58cdca8675d"
       }
-    }
+    }, 
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.500949653894-14vrbk0mc5mou0idd0ijch343319rgfq"
+        }
+      ]
+    ]
   }
 }

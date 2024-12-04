@@ -76,7 +76,9 @@ const RegisterScreen = () => {
             elevation: 5,
           },
         });
-
+        setTimeout(() => {
+          navigation.replace("Login");
+        }, 1000);
         setName("");
         setEmail("");
         setPassword("");
@@ -211,11 +213,7 @@ const RegisterScreen = () => {
                   />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity>
-                <Text className="text-right mt-4 font-semibold text-base ">
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
+             
 
               <TouchableOpacity
                 onPress={handleSignup}

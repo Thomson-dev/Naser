@@ -13,8 +13,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = () => {
+  const navigation = useNavigation();
   const [userId, setUserId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,7 @@ const ProfileScreen = ({ navigation }) => {
       console.log("Token removed");
     } catch (err) {
       console.log("Error removing token", err);
-    } 
+    }
   };
 
   const handleLogout = async () => {
@@ -58,7 +61,7 @@ const ProfileScreen = ({ navigation }) => {
         const response = await axios.get(
           `https://molla-backend.vercel.app/api/user/profile/${userId}`
         );
-      
+
         const { user } = response.data;
         setUser(user);
       } catch (error) {
@@ -89,7 +92,7 @@ const ProfileScreen = ({ navigation }) => {
   }, [userId]);
   return (
     <SafeAreaView className="flex-1 ">
-      <ScrollView  style={{ padding: 10, flex: 1 }}>
+      <ScrollView style={{ padding: 10, flex: 1 }}>
         <View className="flex justify-between p-4 flex-row">
           <View>
             <Image
@@ -113,7 +116,8 @@ const ProfileScreen = ({ navigation }) => {
             marginTop: 12,
           }}
         >
-          <Pressable
+          <TouchableOpacity
+           onPress={() => navigation.navigate("YourOrders")}
             style={{
               padding: 10,
               backgroundColor: "#E0E0E0",
@@ -122,9 +126,10 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ textAlign: "center" }}>Your orders</Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
+           onPress={() => navigation.navigate("Account")}
             style={{
               padding: 10,
               backgroundColor: "#E0E0E0",
@@ -133,7 +138,7 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ textAlign: "center" }}>Your Account</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         <View
@@ -144,7 +149,8 @@ const ProfileScreen = ({ navigation }) => {
             marginTop: 12,
           }}
         >
-          <Pressable
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Home")}
             style={{
               padding: 10,
               backgroundColor: "#E0E0E0",
@@ -153,9 +159,9 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ textAlign: "center" }}>Buy Again</Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             onPress={handleLogout}
             style={{
               padding: 10,
@@ -165,7 +171,7 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <Text style={{ textAlign: "center" }}>Logout</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>

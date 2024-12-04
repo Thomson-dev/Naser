@@ -216,29 +216,46 @@ const HomeScreen = ({ navigation }) => {
             </Pressable>
           </TouchableOpacity>
 
+          <View className="p-3 mt-2">
+            <Text className="text-2xl">Find The Most</Text>
+            <Text className="text-2xl text-[#8ec0c0]">Luxurious products</Text>
+          </View>
+
           {/* Search */}
-          <View className="border mt-3 flex flex-row border-gray-300 p-2 mx-2 rounded-lg items-center">
+          <View className="border mt-3 flex flex-row border-gray-300 p-2 mx-2 rounded-xl items-center">
             <AntDesign name="search1" size={18} color="black" />
             <TextInput
-              className="flex-1 ml-4"
+              className="flex-1  ml-4"
               placeholder="Search here..."
               placeholderTextColor="gray"
               value={searchText}
               onChangeText={(text) => setSearchText(text)}
             />
+
+            <View>
+              <Ionicons name="mic-outline" size={24} color="black" />
+            </View>
           </View>
 
+
+
           {/* Slider */}
-          <SliderBox
-            images={images}
-            autoPlay
-            circleLoop
-            dotColor={"#13274F"}
-            inactiveDotColor="#90A4AE"
-            paginationBoxStyle={{ display: "none" }}
-            dotStyle={{ display: "none" }}
-            ImageComponentStyle={{ width: "100%", marginTop: 10 }}
-          />
+          <View className="">
+            <SliderBox
+              images={images}
+              autoPlay
+              circleLoop
+              dotColor={"#13274F"}
+              inactiveDotColor="#90A4AE"
+              paginationBoxStyle={{ display: "none" }}
+              dotStyle={{ display: "none" }}
+              ImageComponentStyle={{
+                width: "92%",
+                borderRadius: 10,
+                marginTop: 10,
+              }}
+            />
+          </View>
 
           {/* Category */}
           <ScrollView

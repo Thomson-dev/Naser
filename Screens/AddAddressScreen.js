@@ -140,7 +140,7 @@ const AddAddressScreen = ({ navigation }) => {
             </TouchableOpacity>
             <Text className="flex-1 text-xl font-bold text-center">
               Address Details
-            </Text>
+            </Text> 
           </View>
 
           <View className="" style={{ padding: 15 }}>

@@ -566,7 +566,7 @@ const ConfirmationScreen = () => {
               >
                 <Text style={{ fontSize: 16, fontWeight: "500" }}>Items</Text>
 
-                <Text style={{ fontSize: 16 }}>${total}</Text>
+                <Text style={{ fontSize: 16 }}>${total.toFixed(2)}</Text>
               </View>
 
               <View

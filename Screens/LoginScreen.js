@@ -10,6 +10,8 @@ import {
   ScrollView,
   ActivityIndicator,
   StatusBar,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -33,18 +35,19 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
- 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if (token) {
-  
           navigation.replace("Tab");
         } else {
           console.log("No token found");
@@ -66,49 +69,29 @@ const LoginScreen = () => {
     axios
       .post("https://molla-backend.vercel.app/api/user/signin", user)
       .then((response) => {
-       
-        const token = response.data.token
+        const token = response.data.token;
 
         AsyncStorage.setItem("authToken", token);
-        navigation.replace("Tab");
+        setIsSuccess(true);
+        setModalMessage("Login successful!");
+        setModalVisible(true);
+        setTimeout(() => {
+          navigation.replace("Tab");
+        }, 2000);
       })
       .catch((error) => {
         let errorMessage = "An error occurred while Login";
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
           errorMessage = error.response.data.message || errorMessage;
         } else if (error.request) {
-          // The request was made but no response was received
           errorMessage = "No response received from the server";
         } else {
-          // Something happened in setting up the request that triggered an Error
           errorMessage = error.message;
         }
 
-        Toast.show({
-          type: "error",
-          text1: "Login Error",
-          text2: errorMessage,
-          position: "top",
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 50,
-          bottomOffset: 40,
-          textStyle: { color: "white", fontSize: 18 },
-          style: {
-            backgroundColor: "#d9534f",
-            padding: 15,
-            borderRadius: 8,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            elevation: 5,
-          },
-        });
-
-        console.log("login failed", error);
+        setIsSuccess(false);
+        setModalMessage(errorMessage);
+        setModalVisible(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -122,24 +105,12 @@ const LoginScreen = () => {
   return (
     <SafeAreaView className="flex-1">
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-      <StatusBar
-        barStyle="light-content" // Set text color to light
-        backgroundColor="black" // Set background color
-       
-      />
+        <StatusBar
+          barStyle="light-content" // Set text color to light
+          backgroundColor="black" // Set background color
+        />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View className="p-6 flex-1">
-            {/* <TouchableOpacity
-              onPress={handleGoBack}
-              className="rounded-full flex justify-center items-center w-10 h-10 bg-[#D9D9D9]"
-            >
-              <Ionicons
-                name={"arrow-back-outline"}
-                color={colors.primary}
-                size={25}
-              />
-            </TouchableOpacity> */}
-
             <View className="my-8">
               <Text className="font-semibold" style={styles.headingText}>
                 Hey,
@@ -197,8 +168,10 @@ const LoginScreen = () => {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity>
-                <Text className="text-right mt-4 font-semibold text-base ">
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ForgotPassword")}
+              >
+                <Text className="text-right mt-6 font-semibold text-sm ">
                   Forgot Password?
                 </Text>
               </TouchableOpacity>
@@ -215,6 +188,16 @@ const LoginScreen = () => {
                   <Text style={styles.loginText}>Login</Text>
                 )}
               </TouchableOpacity>
+
+              <Text style={styles.continueText}>or continue with</Text>
+
+              <TouchableOpacity style={styles.googleButtonContainer}>
+                <Image
+                  source={require("../assets/google.png")}
+                  style={styles.googleImage}
+                />
+                <Text style={styles.googleText}>Google</Text>
+              </TouchableOpacity>
               <View style={styles.footerContainer}>
                 <Text style={styles.accountText}>Don’t have an account?</Text>
                 <TouchableOpacity onPress={handleSignup}>
@@ -225,6 +208,27 @@ const LoginScreen = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{modalMessage}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -275,7 +279,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   loginButtonWrapper: {
-    backgroundColor: '#008397',
+    backgroundColor: "#008397",
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
   },
   googleButtonContainer: {
     flexDirection: "row",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: 100,
     justifyContent: "center",
@@ -320,6 +324,47 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   signupText: {
+    color: colors.primary,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginTop: 15,
+  },
+  buttonClose: {
+    backgroundColor: colors.primary,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 16, 
     color: colors.primary,
   },
 });
