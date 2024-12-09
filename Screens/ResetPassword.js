@@ -83,7 +83,7 @@ const ResetPassword = () => {
             </View>
 
             <View className="mt-8 mx-8">
-              <View className="flex flex-row rounded-xl gap-4 mt-6  items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-2 mt-6  items-center border border-gray-300 p-2">
                 <SimpleLineIcons
                   name={"lock"}
                   size={30}

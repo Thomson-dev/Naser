@@ -109,6 +109,7 @@ const ProfileScreen = () => {
         </Text>
 
         <View
+        className = 'px-2'
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -119,29 +120,30 @@ const ProfileScreen = () => {
           <TouchableOpacity
            onPress={() => navigation.navigate("YourOrders")}
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: "#E0E0E0",
-              borderRadius: 25,
+              borderRadius: 10,
               flex: 1,
             }}
           >
-            <Text style={{ textAlign: "center" }}>Your orders</Text>
+            <Text className ='text-black font-semibold' style={{ textAlign: "center" }}>Your orders</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
            onPress={() => navigation.navigate("Account")}
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: "#E0E0E0",
-              borderRadius: 25,
+              borderRadius: 10,
               flex: 1,
             }}
           >
-            <Text style={{ textAlign: "center" }}>Your Account</Text>
+            <Text className ='text-black font-semibold' style={{ textAlign: "center" }}>Your Account</Text>
           </TouchableOpacity>
         </View>
 
         <View
+        className = 'px-2'
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -152,25 +154,25 @@ const ProfileScreen = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate("Home")}
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: "#E0E0E0",
-              borderRadius: 25,
+              borderRadius: 10,
               flex: 1,
             }}
           >
-            <Text style={{ textAlign: "center" }}>Buy Again</Text>
+            <Text className ='text-black font-semibold' style={{ textAlign: "center" }}>Buy Again</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={handleLogout}
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: "#E0E0E0",
-              borderRadius: 25,
+              borderRadius: 10,
               flex: 1,
             }}
           >
-            <Text style={{ textAlign: "center" }}>Logout</Text>
+            <Text className ='text-black font-semibold' style={{ textAlign: "center" }}>Logout</Text>
           </TouchableOpacity>
         </View>
 

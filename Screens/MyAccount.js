@@ -15,9 +15,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode";
+
+import { useNavigation } from "@react-navigation/native";
+import { jwtDecode } from "jwt-decode";
 
 const MyAccount = () => {
+  const navigation = useNavigation();
   const colors = {
     white: "#FFFFFF",
     primary: "#45484A",
@@ -27,38 +30,69 @@ const MyAccount = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchUser = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if (token) {
           const decoded = jwtDecode(token);
           const userId = decoded.id;
 
-          const response = await axios.get(`https://your-api-endpoint.com/users/${userId}`);
-          const user = response.data;
-
-          setUsername(user.username);
-          setEmail(user.email);
-          // You may want to handle the password differently
+          setUserId(userId);
         }
+      } catch (error) {
+        console.log("Error fetching user", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!userId) return;
+
+      try {
+        const response = await axios.get(
+          `https://molla-backend.vercel.app/api/user/profile/${userId}`
+        );
+        const user = response.data.user;
+
+        setUsername(user.username);
+        setEmail(user.email);
+        // You may want to handle the password differently
       } catch (error) {
         console.log("Error fetching user profile", error);
       }
     };
 
     fetchUserProfile();
-  }, []);
+  }, [userId]);
 
-  const handleAddAddress = () => {
+  const handleUpdateProfile = async () => {
     setIsLoading(true);
-    // Add your address handling logic here
-    setTimeout(() => {
+    try {
+      const response = await axios.put(
+        `https://molla-backend.vercel.app/api/user/update-profile/${userId}`,
+        {
+          username,
+          email,
+          password,
+        }
+      );
+      // Handle success response
+     
+      alert("Profile updated successfully");
+    } catch (error) {
+      // Handle error response
+    
+      alert(`Failed to update profile: ${error.response.data.message}`);
+    } finally {
       setIsLoading(false);
-      // Navigate or show success message
-    }, 2000);
+    }
   };
 
   return (
@@ -109,14 +143,14 @@ const MyAccount = () => {
             />
 
             <Pressable
-              onPress={handleAddAddress}
+              onPress={handleUpdateProfile}
               style={styles.addButton}
               disabled={isLoading}
             >
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={styles.addButtonText}>Update </Text>
+                <Text style={styles.addButtonText}>Update</Text>
               )}
             </Pressable>
           </View>

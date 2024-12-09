@@ -98,12 +98,12 @@ const YourOrders = () => {
                   </View>
                 </View>
 
-                <View className="flex-row mt-8 justify-between ">
+                <View className="flex-row mt-4 justify-between ">
                   <Text className="text-base font-bold">
                     {order.paymentMethod}
                   </Text>
                   <View className="flex-row items-center">
-                    <Text className="text-base font-bold">x{product.quantity}</Text>
+                    <Text className="text-lg font-bold">x{product.quantity}</Text>
                     <Text className="text-base font-bold ml-4">
                       ${product.price.toFixed(2)}
                     </Text>

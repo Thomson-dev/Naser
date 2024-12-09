@@ -125,7 +125,7 @@ const LoginScreen = () => {
 
             {/* form */}
             <View className="mt-5 flex-1 p-2">
-              <View className="flex flex-row rounded-xl gap-4 items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-2 p-2  items-center  border border-gray-300 ">
                 <Ionicons
                   name={"mail-outline"}
                   size={30}
@@ -141,7 +141,7 @@ const LoginScreen = () => {
                 />
               </View>
 
-              <View className="flex flex-row rounded-xl gap-4 mt-6  items-center border border-gray-300 p-2">
+              <View className="flex flex-row items-center p-2  rounded-xl gap-2 mt-6   border border-gray-300  ">
                 <SimpleLineIcons
                   name={"lock"}
                   size={30}

@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, Text, Image, StatusBar } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import * as SplashScreen from 'expo-splash-screen';
-import HomeScreen from "./HomeScreen";
 import LoginScreen from "./LoginScreen";
 
 const slides = [
   {
     id: 1,
-    title: "Welcome to  FASTGAK",
+    title: "Welcome to FASTGAK",
     description:
-      "Discover the latest fashion & trends in menswear & womenswear at ASOS. ",
+      "Discover the latest fashion & trends in menswear & womenswear at ASOS.",
     image: require("../assets/slider-img-1.png"),
   },
   {
@@ -30,23 +29,21 @@ const slides = [
 ];
 
 const OnboardingScreen = () => {
-  const [showHomePage, setShowHomePage] = useState(false);
-
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
         // Keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        // Pre-load assets here
-        // await Font.loadAsync(Entypo.font);
-        // Artificially delay for two seconds to simulate a slow loading experience.
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Artificially delay for three seconds to simulate a slow loading experience.
+        await new Promise(resolve => setTimeout(resolve, 3000));
       } catch (e) {
         console.warn(e);
       } finally {
         // Tell the application to render
-        setShowHomePage(true);
+        setShowOnboarding(true);
         await SplashScreen.hideAsync();
       }
     }
@@ -74,9 +71,9 @@ const OnboardingScreen = () => {
     );
   };
 
-  if (showHomePage) {
+  if (showLogin) {
     return <LoginScreen />;
-  } else {
+  } else if (showOnboarding) {
     return (
       <>
         <StatusBar
@@ -133,11 +130,14 @@ const OnboardingScreen = () => {
           renderNextButton={() => buttonLabel("Next")}
           renderSkipButton={() => buttonLabel("Skip")}
           onDone={() => {
-            setShowHomePage(true);
+            setShowOnboarding(false);
+            setShowLogin(true);
           }}
         />
       </>
     );
+  } else {
+    return null;
   }
 };
 

@@ -38,11 +38,11 @@ const App = () => {
       <StripeProvider publishableKey={STRIPE_KEY}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/* <Stack.Screen
+            <Stack.Screen
               name="Onboarding"
               component={OnboardingScreen}
               options={{ animation: "slide_from_bottom" }}
-            /> */}
+            />
             <Stack.Screen
               name="Login"
               component={LoginScreen}

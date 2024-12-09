@@ -24,20 +24,23 @@ const colors = {
 const ForgotPassword = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
- 
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleForgetPassword = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.post('https://molla-backend.vercel.app/api/user/send-otp', { email });
+      const response = await axios.post(
+        "https://molla-backend.vercel.app/api/user/send-otp",
+        { email }
+      );
       // Handle success response
-      console.log('OTP request successful:', response.data);
-      navigation.navigate('EnterOtp', { email });
+      console.log("OTP request successful:", response.data);
+      navigation.navigate("EnterOtp", { email });
     } catch (error) {
       // Handle error response
-      console.error('Error requesting OTP:', error);
-      alert('Failed to request OTP. Please try again.');
+      console.error("Error requesting OTP:", error);
+      alert("Failed to request OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -73,23 +76,23 @@ const ForgotPassword = () => {
               </Text>
             </View>
             <View className="mt-8 mx-9">
-        <View className="flex flex-row rounded-xl gap-4 items-center border border-gray-300 p-2">
-          <Ionicons
-            name={"mail-outline"}
-            size={30}
-            color={colors.secondary}
-          />
-          <TextInput
-            className="flex-1 text-base text-gray-700"
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            placeholderTextColor={colors.secondary}
-            keyboardType="email-address"
-          />
-        </View>
-      </View>
-            <View className = 'p-6'>
+              <View className="flex flex-row rounded-xl gap-2 p-2 items-center  border border-gray-300 ">
+                <Ionicons
+                  name={"mail-outline"}
+                  size={30}
+                  color={colors.secondary}
+                />
+                <TextInput
+                  className="flex-1  text-base text-gray-700"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                  placeholderTextColor={colors.secondary}
+                  keyboardType="email-address"
+                />
+              </View>
+            </View>
+            <View className="p-6">
               <TouchableOpacity
                 onPress={handleForgetPassword}
                 className=" py-4"
@@ -99,7 +102,12 @@ const ForgotPassword = () => {
                 {isLoading ? (
                   <ActivityIndicator size="small" color={colors.white} />
                 ) : (
-                  <Text className = 'text-white text-center text-base' style={styles.loginText}>Submit</Text>
+                  <Text
+                    className="text-white text-center text-base"
+                    style={styles.loginText}
+                  >
+                    Submit
+                  </Text>
                 )}
               </TouchableOpacity>
             </View>

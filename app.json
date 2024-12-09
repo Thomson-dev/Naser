@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Naser",
-    "slug": "Naser",
+    "name": "FastGak",
+    "slug": "FastGak",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/naseer1124.jpg",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splashScreen.png",
+      "image": "./assets/Splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/naseer1124.jpg",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.thomson200.Naser"
@@ -25,11 +25,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "e37fc77d-339e-4a12-b91e-a58cdca8675d"
-      }
-    }, 
     "plugins": [
       [
         "@react-native-google-signin/google-signin",
@@ -37,6 +32,11 @@
           "iosUrlScheme": "com.googleusercontent.apps.500949653894-14vrbk0mc5mou0idd0ijch343319rgfq"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3767fae0-917c-4916-b668-890c139686e8"
+      }
+    }
   }
 }

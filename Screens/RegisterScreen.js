@@ -10,6 +10,8 @@ import {
   View,
   ActivityIndicator,
   StatusBar,
+  Modal,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -33,6 +35,9 @@ const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   console.log(email, password, name);
 
   const navigation = useNavigation();
@@ -55,27 +60,31 @@ const RegisterScreen = () => {
       .then((response) => {
         console.log(response);
 
-        Toast.show({
-          type: "success",
-          text1: "Registration successful",
-          text2: "You have been registered successfully",
-          position: "top",
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 50,
-          bottomOffset: 40,
-          textStyle: { color: "white", fontSize: 18 },
-          style: {
-            backgroundColor: "#5cb85c", // Green color for success
-            padding: 15,
-            borderRadius: 8,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            elevation: 5,
-          },
-        });
+        // Toast.show({
+        //   type: "success",
+        //   text1: "Registration successful",
+        //   text2: "You have been registered successfully",
+        //   position: "top",
+        //   visibilityTime: 4000,
+        //   autoHide: true,
+        //   topOffset: 50,
+        //   bottomOffset: 40,
+        //   textStyle: { color: "white", fontSize: 18 },
+        //   style: {
+        //     backgroundColor: "#5cb85c", // Green color for success
+        //     padding: 15,
+        //     borderRadius: 8,
+        //     shadowColor: "#000",
+        //     shadowOffset: { width: 0, height: 2 },
+        //     shadowOpacity: 0.3,
+        //     shadowRadius: 4,
+        //     elevation: 5,
+        //   },
+        // });
+
+        setIsSuccess(true);
+        setModalMessage("Registration successful");
+        setModalVisible(true);
         setTimeout(() => {
           navigation.replace("Login");
         }, 1000);
@@ -99,27 +108,32 @@ const RegisterScreen = () => {
           errorMessage = error.message;
         }
 
-        Toast.show({
-          type: "error",
-          text1: "Registration Error",
-          text2: errorMessage,
-          position: "top",
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 50,
-          bottomOffset: 40,
-          textStyle: { color: "white", fontSize: 18 },
-          style: {
-            backgroundColor: "#d9534f", // Red color for error
-            padding: 15,
-            borderRadius: 8,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            elevation: 5,
-          },
-        });
+        // Toast.show({
+
+      
+        //   type: "error",
+        //   text1: "Registration Error",
+        //   text2: errorMessage,
+        //   position: "top",
+        //   visibilityTime: 4000,
+        //   autoHide: true,
+        //   topOffset: 50,
+        //   bottomOffset: 40,
+        //   textStyle: { color: "white", fontSize: 18 },
+        //   style: {
+        //     backgroundColor: "#d9534f", // Red color for error
+        //     padding: 15,
+        //     borderRadius: 8,
+        //     shadowColor: "#000",
+        //     shadowOffset: { width: 0, height: 2 },
+        //     shadowOpacity: 0.3,
+        //     shadowRadius: 4,
+        //     elevation: 5,
+        //   },
+        // });
+        setIsSuccess(false);
+        setModalMessage(errorMessage);
+        setModalVisible(true);
       })
       .finally(() => {
         setIsLoading(false); // Stop loading
@@ -158,7 +172,7 @@ const RegisterScreen = () => {
 
             {/* Form */}
             <View className="mt-5 flex-1 p-2">
-              <View className="flex flex-row rounded-xl gap-4 items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-2 p-2 items-center border border-gray-300  ">
                 <AntDesign name="user" size={30} color={colors.secondary} />
 
                 <TextInput
@@ -171,7 +185,7 @@ const RegisterScreen = () => {
                 />
               </View>
 
-              <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-2 p-2 mt-6 items-center border border-gray-300 px-1">
                 <Ionicons
                   name={"mail-outline"}
                   size={30}
@@ -187,7 +201,7 @@ const RegisterScreen = () => {
                 />
               </View>
 
-              <View className="flex flex-row rounded-xl gap-4 mt-6 items-center border border-gray-300 p-2">
+              <View className="flex flex-row rounded-xl gap-2 p-2 mt-6 items-center border border-gray-300  px-1"> 
                 <SimpleLineIcons
                   name={"lock"}
                   size={30}
@@ -238,6 +252,27 @@ const RegisterScreen = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{modalMessage}</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -332,6 +367,48 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 20,
     gap: 5,
+  },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginTop: 15,
+  },
+  buttonClose: {
+    backgroundColor: colors.primary,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 16, 
+    color: colors.primary,
   },
   accountText: {
     color: colors.primary,

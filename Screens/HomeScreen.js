@@ -222,7 +222,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
 
           {/* Search */}
-          <View className="border mt-3 flex flex-row border-gray-300 p-2 mx-2 rounded-xl items-center">
+          <View className="border mt-3 flex flex-row border-gray-300 p-2  mx-3 rounded-xl items-center">
             <AntDesign name="search1" size={18} color="black" />
             <TextInput
               className="flex-1  ml-4"
